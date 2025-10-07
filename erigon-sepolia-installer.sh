@@ -139,8 +139,12 @@ fi
 if $SUCCESS; then
   echo -e "${ORANGE}Fetching latest Erigon snapshot for Sepolia...${NC}"
   
-  # Get the latest snapshot URL
-  SNAPSHOT_URL="https://snapshots.ethpandaops.io/sepolia/erigon/latest/snapshot.tar.lz4"
+  # Get the latest snapshot URL - use a working Erigon snapshot
+  # Try to get the latest block number first
+  LATEST_BLOCK=$(curl -s "https://snapshots.ethpandaops.io/sepolia/erigon/latest" 2>/dev/null || echo "9360000")
+  SNAPSHOT_URL="https://snapshots.ethpandaops.io/sepolia/erigon/${LATEST_BLOCK}/snapshot.tar.lz4"
+  
+  echo "• Using snapshot URL: $SNAPSHOT_URL"
   
   echo "• Getting snapshot size for progress bar..."
   SNAPSHOT_SIZE=$(wget --spider --server-response "$SNAPSHOT_URL" 2>&1 | grep -i 'content-length' | awk '{print $2}' | tr -d '\r')
