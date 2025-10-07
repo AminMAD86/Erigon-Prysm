@@ -17,12 +17,7 @@ echo -e "${ORANGE}      ETHEREUM SEPOLIA NODE INSTALLER (Erigon)${NC}"
 echo -e "${ORANGE}                Optimized for Aztec${NC}"
 echo -e "${ORANGE}============================================================${NC}"
 
-# --- System Check ---
-echo -e "${ORANGE}Recommended System Specifications:${NC}"
-echo "• CPU: 4+ Cores"
-echo "• RAM: 16 GB"
-echo "• Storage: 1TB SSD"
-echo -e "${ORANGE}============================================================${NC}"
+# --- System Check (Simplified) ---
 echo -e "${ORANGE}Checking your system resources...${NC}"
 
 AVAILABLE_SPACE=$(df -BG --output=avail . | tail -1 | tr -d 'G ')
@@ -35,44 +30,8 @@ echo "• Checked mount point: $MOUNT_POINT"
 echo "• Available Storage: ${AVAILABLE_SPACE}G"
 echo "• CPU Cores: ${CPU_CORES}"
 echo "• Total RAM: ${TOTAL_RAM}GB"
-
-WARNING=""
-if [[ ${AVAILABLE_SPACE} -lt 975 ]]; then
-  WARNING+="${RED}• Low storage space detected (minimum 1TB required)${NC}\n"
-fi
-if [[ ${CPU_CORES} -lt 4 ]]; then
-  WARNING+="${RED}• Insufficient CPU cores detected (minimum 4 required)${NC}\n"
-fi
-if [[ ${TOTAL_RAM} -lt 16 ]]; then
-  WARNING+="${RED}• Insufficient RAM detected (minimum 16GB required)${NC}\n"
-fi
-
-if [[ -n "$WARNING" ]]; then
-  echo -e "${RED}Potential Issues Found:${NC}"
-  printf "$WARNING"
-  echo "What would you like to do?"
-  echo -e "${CYAN}1: Continue installation despite warnings${NC}"
-  echo -e "${CYAN}2: Abort installation${NC}"
-  echo -n "• Enter your choice (1-2): "
-  read -r CHOICE
-  case "$CHOICE" in
-    1)
-      echo "Continuing installation..."
-      ;;
-    2)
-      echo "Installation aborted by user."
-      SUCCESS=false
-      ;;
-    *)
-      echo "Invalid choice. Aborting installation."
-      SUCCESS=false
-      ;;
-  esac
-fi
-
-if ! $SUCCESS; then
-  echo -e "${RED}Setup aborted due to system resource warnings or user abort.${NC}"
-else
+echo -e "${GREEN}• Proceeding with installation...${NC}"
+echo -e "${ORANGE}============================================================${NC}"
 
 # --- Start Peak Storage Monitor ---
 STORAGE_BEFORE=$(df -BG --output=used . | tail -1 | tr -d 'G ')
@@ -517,4 +476,4 @@ else
   echo -e "${RED}Please resolve errors and rerun the script.${NC}"
 fi
 
-fi # End main SUCCESS check from system pre-check
+# Installation complete
